@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.preflight import run_preflight
+from app.db.connection import close_database
 
 # ============================================================
 # Application Lifecycle
@@ -19,6 +20,9 @@ async def lifespan(app: FastAPI):
     app.state.preflight = preflight_result
     print("[INFO] System preflight completed.")
     yield
+
+    # Database Shutdown
+    close_database()
     print("[INFO] LangChain AI Agent shutting down...")
 
 # ============================================================
