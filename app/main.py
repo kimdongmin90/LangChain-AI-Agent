@@ -3,26 +3,21 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.core.preflight import run_preflight
 
 # ============================================================
 # Application Lifecycle
 # ============================================================
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    FastAPI 애플리케이션 시작 및 종료 관리
-    startup:
-        - 애플리케이션 초기화
-        - 추후 GPU / DB Preflight 연결
-        - 추후 Agent 초기화
-    shutdown:
-        - DB 연결 종료
-        - GPU 및 모델 리소스 정리
-    """
     print("[INFO] LangChain AI Agent starting...")
-    # TODO: 추후 Preflight 연결
-    # from app.core.preflight import run_preflight
-    # await run_preflight()
+
+    # System Preflight
+    preflight_result = await run_preflight()
+
+    # 점검 결과 저장
+    app.state.preflight = preflight_result
+    print("[INFO] System preflight completed.")
     yield
     print("[INFO] LangChain AI Agent shutting down...")
 
