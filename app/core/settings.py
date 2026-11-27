@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     # --------------------------------------------------------
     # Embedding
     # --------------------------------------------------------
-    EMBEDDING_MODEL: str = "intfloat/multilingual-e5-large"
+    EMBEDDING_MODEL: str = "intfloat/multilingual-e5-small"
     EMBEDDING_DEVICE: str = "cuda"
     EMBEDDING_BATCH_SIZE: int = 32
 
